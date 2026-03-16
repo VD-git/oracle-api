@@ -2,8 +2,7 @@ name: Deploy FastAPI
 
 on:
   push:
-    branches:
-      - master
+    branches: [main]
 
 jobs:
   deploy:
@@ -16,11 +15,22 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-
           script: |
-            cd app
-            git pull
+            mkdir -p ~/app
+            cd ~/app
+
+            if [ -d ".git" ]; then
+              git reset --hard
+              git pull
+            else
+              git clone https://github.com/SEU_USER/SEU_REPO.git .
+            fi
+
+            sudo usermod -aG docker $SERVER_USER || true
+
             docker stop oracle-fastapi || true
             docker rm oracle-fastapi || true
-            docker build -t oracle-fastapi-app .
-            docker run -d -p 8000:8000 --name oracle-fastapi oracle-fastapi-app
+
+            docker build -t oracle-fastapi .
+
+            docker run -d -p 8000:8000 --name oracle-fastapi oracle-fastapi
