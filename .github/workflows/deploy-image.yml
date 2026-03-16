@@ -23,7 +23,7 @@ jobs:
               git reset --hard
               git pull
             else
-              git clone https://github.com/SEU_USER/SEU_REPO.git .
+              git clone https://github.com/VD-git/oracle-api.git .
             fi
 
             sudo usermod -aG docker $SERVER_USER || true
