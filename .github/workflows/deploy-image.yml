@@ -35,3 +35,5 @@ jobs:
             docker build -t oracle-fastapi .
 
             docker run -d -p 8000:8000 --name oracle-fastapi oracle-fastapi
+
+            curl -L ${{ secrets.SERVER_HOST }}
